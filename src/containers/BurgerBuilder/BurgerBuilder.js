@@ -23,7 +23,22 @@ class BurgerBuilder extends Component{
             cheese: 0,
             meat: 0
         },
-        totlaPrice: 4
+        totlaPrice: 4,
+        purchasable: false
+    }
+
+    updatePurchasableState = (ingredients) =>{
+
+        const sum = Object.keys(ingredients)
+            .map(igKey => {
+                return ingredients[igKey]
+            })
+            .reduce((sum, el) => {
+                return sum + el
+            }, 0);
+
+            this.setState({purchasable: sum > 0});
+        
     }
 
     addIngredientHandler= (type) =>{
@@ -40,12 +55,16 @@ class BurgerBuilder extends Component{
         const newPrice = oldPrice + additionPrice
 
         this.setState({totlaPrice : newPrice, ingredients : updatedIngredient})
-
+        this.updatePurchasableState(updatedIngredient)
     }
 
     removeIngredientHandler = (type) => {
         
         const oldCount = this.state.ingredients[type]
+
+        if (oldCount <= 0) {
+            return;
+        }
         const updatedCount = oldCount - 1
         const updatedIngredient = {
             ...this.state.ingredients
@@ -57,17 +76,26 @@ class BurgerBuilder extends Component{
         const newPrice = oldPrice - deductionPrice
 
         this.setState({totlaPrice : newPrice, ingredients : updatedIngredient})
+        this.updatePurchasableState(updatedIngredient)
     }
     
     render(){
-        console.log(this.state.totlaPrice);
-        
+       const disableInfo = {
+           ...this.state.ingredients
+       }
+       for (let key in disableInfo) {
+          disableInfo[key] = disableInfo[key] <= 0
+           
+       }
         return(
             <Auxiliary>
                 <Burger ingredients={this.state.ingredients} />
                 <BuildControls
                     addIngredient={this.addIngredientHandler}
                     removeIngredient={this.removeIngredientHandler}
+                    price={this.state.totlaPrice}
+                    purchasable={this.state.purchasable}
+                    disabled={disableInfo}
                 />
             </Auxiliary>
         )
