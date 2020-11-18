@@ -45,17 +45,25 @@ class BurgerBuilder extends Component{
 
     addIngredientHandler= (type) =>{
         
+        //copy the old count in to new variable
         const oldCount = this.state.ingredients[type]
+
+        //set updated count to nthe new variable
         const updatedCount = oldCount + 1
+
+        //create the new object and copying the elemint of the old object in to the new object
         const updatedIngredient = {
             ...this.state.ingredients
         }
+
+        // set the new count into the perticular enliment of the new object
         updatedIngredient[type] = updatedCount
 
         const additionPrice = INGREDIENT_PRICE[type]
         const oldPrice = this.state.totlaPrice
         const newPrice = oldPrice + additionPrice
 
+        //replace the new object in to the old aobject
         this.setState({totlaPrice : newPrice, ingredients : updatedIngredient})
         this.updatePurchasableState(updatedIngredient)
     }
@@ -84,6 +92,14 @@ class BurgerBuilder extends Component{
     purchesHandler = () =>{
         this.setState({purchasing: true})
     }
+
+    purchesCancleHandler = () => {
+        this.setState({purchasing: false})
+    }
+
+    purchesContinueHandler = () => {
+        alert('You Continue!')
+    }
     
     render(){
        const disableInfo = {
@@ -95,8 +111,13 @@ class BurgerBuilder extends Component{
        }
         return(
             <Auxiliary>
-                <Modal show={this.state.purchasing}>
-                    <OrderSummary ingredients={this.state.ingredients}/>
+                <Modal show={this.state.purchasing} modalClose={this.purchesCancleHandler}>
+                    <OrderSummary 
+                    price={this.state.totlaPrice}
+                    ingredients={this.state.ingredients}
+                    purchesCancled={this.purchesCancleHandler}
+                    purchesContinued={this.purchesContinueHandler}
+                    />
                 </Modal>
                 <Burger ingredients={this.state.ingredients} />
                 <BuildControls
