@@ -5,6 +5,7 @@ import classes from './SideDrawer.module.css'
 import Backdrop from './../../UI/Backdrop/Backdrop'
 import Auxiliary from  './../../../hoc/Auxiliary'
 
+
 const SideDrawer = (props) => {
 
     let attachedClasses = [classes.SideDrawer, classes.Close]
