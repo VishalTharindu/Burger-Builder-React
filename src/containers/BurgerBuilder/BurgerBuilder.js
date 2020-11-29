@@ -4,8 +4,9 @@ import Burger from './../../components/Buger/Burger'
 import BuildControls from './../../components/Buger/BuildControls/BuildControls'
 import Modal from './../../components/UI/Modal/Modal'
 import OrderSummary from './../../components/Buger/OrderSummary/OrderSummary'
+import withErrorHandler from './../../hoc/WithErrorHandler/withErrorHandler'
 import axios from '../../axiosorders';
-import Spinner from '../../components/UI/Spiner/Spiner'
+import Spiner from '../../components/UI/Spiner/Spiner'
 
 const INGREDIENT_PRICE = {
     salad: 0.5,
@@ -30,7 +31,7 @@ class BurgerBuilder extends Component{
         totlaPrice: 4,
         purchasable: false,
         purchasing: false,
-        loading:false
+        loader:false
     }
 
     updatePurchasableState = (ingredients) =>{
@@ -105,7 +106,6 @@ class BurgerBuilder extends Component{
         
         this.setState({loader: true})
         const order = {
-
             ingredients:this.state.ingredients,
             price:this.state.totlaPrice,
             coustomer:{
@@ -119,7 +119,7 @@ class BurgerBuilder extends Component{
             deliverymethod:"cash on delivery"
         }
 
-        axios.post('/orders.json', order)
+        axios.post('/orders', order)
             .then(response => {
                 this.setState({loader:false, purchasing: false})
             })
@@ -144,8 +144,9 @@ class BurgerBuilder extends Component{
             purchesContinued={this.purchesContinueHandler}
         />
 
-        if (this.state.loading) {
-            orderSummary = <Spinner />
+        if (this.state.loader) {
+            console.log(this.state.loader);
+            orderSummary = <Spiner />
         }
         return(
             <Auxiliary>
@@ -166,4 +167,4 @@ class BurgerBuilder extends Component{
     }
 }
 
-export default BurgerBuilder;
+export default withErrorHandler(BurgerBuilder ,axios);
