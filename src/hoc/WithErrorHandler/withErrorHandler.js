@@ -10,14 +10,15 @@ const withErrorHandler = (WrappedComponent, axios) => {
         state = {
             error: null
         }
-        componentDidMount(){
-
+        componentWillUnmount(){
+            
             axios.interceptors.request.use(req => {
                 this.setState({error:null})
                 return req
             })
-            axios.interceptors.response.use(res => res, error=>{
+            axios.interceptors.response.use(error=>{
                 this.setState({error: error})
+                console.log(error.message);
             })
         }
 
@@ -26,6 +27,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
         }
 
         render(){
+            console.log(this.state.error);
             return(
                 <Auxiliary>
                     <Modal 
