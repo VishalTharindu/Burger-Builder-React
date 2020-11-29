@@ -2,8 +2,7 @@ import React from 'react'
 import classes from './Spiner.module.css'
 
 const  Spiner = () => (
-
-    <div className={classes.Loader}></div>
+    <div className={classes.Loader}>Loading.........</div>
 )
 
 
